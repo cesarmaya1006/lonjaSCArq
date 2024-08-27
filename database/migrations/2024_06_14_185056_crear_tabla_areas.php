@@ -15,8 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id')->autoIncrement();
             $table->unsignedBigInteger('area_id')->nullable();
             $table->foreign('area_id', 'fk_area_area')->references('id')->on('areas')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedBigInteger('empresa_id');
-            $table->foreign('empresa_id', 'fk_area_empresa')->references('id')->on('empresas')->onDelete('restrict')->onUpdate('restrict');
+            $table->unsignedBigInteger('clinica_id');
+            $table->foreign('clinica_id', 'fk_area_clinicas')->references('id')->on('clinicas')->onDelete('restrict')->onUpdate('restrict');
             $table->string('area');
             $table->timestamps();
             $table->charset = 'utf8';

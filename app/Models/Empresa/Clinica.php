@@ -1,23 +1,21 @@
 <?php
 
-namespace App\Models\Proyectos;
+namespace App\Models\Empresa;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class ComponenteDoc extends Model
+class Clinica extends Model
 {
     use HasFactory,Notifiable;
-    protected $table = 'componentes_docs';
+    protected $table = 'clinicas';
     protected $guarded = [];
-    //==================================================================================
+
     //----------------------------------------------------------------------------------
-    public function componente()
+    public function areas()
     {
-        return $this->belongsTo(Componente::class, 'componente_id', 'id');
+        return $this->hasMany(Area::class, 'clinica_id', 'id');
     }
     //----------------------------------------------------------------------------------
-    //==================================================================================
-
 }

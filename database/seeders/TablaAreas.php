@@ -25,21 +25,6 @@ class TablaAreas extends Seeder
                 'empresa_id' => 1,
                 'area' => 'Gerencia',
             ],
-            [
-                'area_id' => 1,
-                'empresa_id' => 1,
-                'area' => 'Dirección Administrativa',
-            ],
-            [
-                'area_id' => 1,
-                'empresa_id' => 1,
-                'area' => 'Dirección Técnica',
-            ],
-            [
-                'area_id' => 1,
-                'empresa_id' => 1,
-                'area' => 'Dirección Operativa',
-            ],
         ];
 
         $grupos = EmpGrupo::get();

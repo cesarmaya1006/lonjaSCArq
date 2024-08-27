@@ -104,13 +104,8 @@ class User extends Authenticatable implements MustVerifyEmail
         $roles = str_replace('"','', $roles);
         //$roles = explode(',',$roles);
         $roles = $this->roles;
-        $transversal = false;
-        $transversales = [];
         if ($this->empleado) {
             $nombres_completos = $this->empleado->nombres . ' ' . $this->empleado->apellidos;
-            if ($roles[0]['id']==3 && $this->empleado->empresas_tranv->count()>0) {
-                $transversal = true;
-            }
         }else{
             $nombres_completos = $this->name;
         }
@@ -125,11 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail
         if ($this->empleado) {
             Session::put([
             'cargo_id' => $this->empleado->cargo->cargo,
-            'empresa_id' => $this->empleado->cargo->area->empresa->id,
-            'emp_grupo_id' => $this->empleado->cargo->area->empresa->emp_grupo_id,
-            'transversal' => $transversal,
-            'transversales' => $transversales,
-            'mgl' => $this->empleado->mgl?1:0,
+            'clinica_id' => $this->empleado->cargo->area->clinica->id,
             ]);
         }
     }

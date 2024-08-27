@@ -18,10 +18,10 @@ return new class extends Migration
             $table->dateTime('fec_creacion');
             $table->string('titulo', 255);
             $table->longText('mensaje');
-            $table->string('link', 255);
-            $table->string('id_link', 255);
-            $table->string('tipo', 50);
-            $table->string('accion', 50);
+            $table->string('link', 255)->nullable();
+            $table->string('id_link', 255)->nullable();
+            $table->string('tipo', 50)->nullable();
+            $table->string('accion', 50)->nullable();
             $table->boolean('estado')->default(1);
             $table->timestamps();
             $table->charset = 'utf8';

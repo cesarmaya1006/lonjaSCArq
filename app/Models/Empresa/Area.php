@@ -14,9 +14,9 @@ class Area extends Model
 
     //==================================================================================
     //----------------------------------------------------------------------------------
-    public function empresa()
+    public function clinica()
     {
-        return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
+        return $this->belongsTo(Clinica::class, 'clinica_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function cargos()

@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('historial_docs', function (Blueprint $table) {
+        Schema::create('clinicas', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
-            $table->unsignedBigInteger('historial_id');
-            $table->foreign('historial_id', 'fk_historial_doc')->references('id')->on('historiales')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('titulo');
-            $table->string('tipo');
-            $table->string('url');
-            $table->double('peso');
+            $table->string('clinica');
+            $table->string('email')->nullable();
+            $table->string('telefono', 50)->nullable();
+            $table->string('direccion')->nullable();
+            $table->string('contacto')->nullable();
+            $table->string('cargo')->nullable();
+            $table->string('logo')->nullable();
+            $table->boolean('estado')->default(1);
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_spanish_ci';
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('historial_docs');
+        Schema::dropIfExists('clinicas');
     }
 };
