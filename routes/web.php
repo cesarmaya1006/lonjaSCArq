@@ -31,6 +31,7 @@ use App\Http\Controllers\Empresa\ProveedoresController;
 use App\Http\Controllers\Empresa\SitLabGenController;
 use App\Http\Controllers\Empresa\SoportesAfiliacionController;
 use App\Http\Controllers\Empresa\VacacionesController;
+use App\Http\Controllers\Extranet\ExtranetPageController;
 use App\Http\Controllers\Proyectos\ComponenteController;
 use App\Http\Controllers\Proyectos\HistorialController;
 use App\Http\Controllers\Proyectos\ProyectoController;
@@ -40,10 +41,18 @@ use App\Http\Middleware\Empleado;
 use App\Http\Middleware\SuperAdmin;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('auth.login');
+
+Route::controller(ExtranetPageController::class)->group(function () {
+    Route::get('/', 'index')->name('extranet.index');
+    Route::get('/registro', 'registro')->name('extranet.registro');
+    Route::get('/loginapp', 'loginapp')->name('extranet.loginapp');
+    Route::post('/register', 'register')->name('extranet.store');
+
 });
-Route::post('logout', [PageController::class, 'logout'])->name('logout');
+
+
+
+
 
 Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_session'),])->group(function () {
     Route::get('', [PageController::class, 'dashboard'])->name('dashboard');
