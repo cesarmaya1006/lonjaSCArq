@@ -32,8 +32,8 @@ class TablaClinicaSeeder extends Seeder
         ];
         // ===================================================================================
         foreach ($datas as $data) {
-            DB::table('empresas')->insert([
-                'clinica' => $data['empresa'],
+            DB::table('clinicas')->insert([
+                'clinica' => $data['clinica'],
                 'email' => $data['email'],
                 'telefono' => $data['telefono'],
                 'direccion' => $data['direccion'],

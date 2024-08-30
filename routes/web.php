@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Clinica\ProductoController;
+use App\Http\Controllers\Clinica\TiempoController;
+use App\Http\Controllers\Clinica\UnidadController;
 use App\Http\Controllers\Config\MenuController;
 use App\Http\Controllers\Config\MenuRolController;
 use App\Http\Controllers\Config\PageController;
@@ -12,6 +15,8 @@ use App\Http\Controllers\Empresa\ClinicaController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\PermisoEmpleadoController;
 use App\Http\Controllers\Extranet\ExtranetPageController;
+use App\Http\Controllers\Facturacion\FacturacionController;
+use App\Http\Controllers\Facturacion\RegistroFactController;
 use App\Http\Middleware\AdminEmp;
 use App\Http\Middleware\Empleado;
 use App\Http\Middleware\SuperAdmin;
@@ -77,7 +82,12 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         // Ruta Administrador Clinicas
         // ------------------------------------------------------------------------------------
         Route::controller(ClinicaController::class)->prefix('clinicas')->group(function () {
-            Route::get('', 'index')->name('empresa.index');
+            Route::get('', 'index')->name('clinicas.index');
+            Route::get('crear', 'create')->name('clinicas.create');
+            Route::get('editar/{id}', 'edit')->name('clinicas.edit');
+            Route::post('guardar', 'store')->name('clinicas.store');
+            Route::put('actualizar/{id}', 'update')->name('clinicas.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('clinicas.destroy');
         });
         // ----------------------------------------------------------------------------------------
     });
@@ -128,12 +138,52 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
             Route::get('setDeshabilitarEmpleado', 'setDeshabilitarEmpleado')->name('empleados.setDeshabilitarEmpleado');
         });
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Unidades
+        Route::controller(UnidadController::class)->prefix('unidades')->group(function () {
+            Route::get('', 'index')->name('unidades.index');
+            Route::get('crear', 'create')->name('unidades.create');
+            Route::get('editar/{id}', 'edit')->name('unidades.edit');
+            Route::post('guardar', 'store')->name('unidades.store');
+            Route::put('actualizar/{id}', 'update')->name('unidades.update');
+            Route::get('active', 'active')->name('unidades.active');
+            Route::get('getUnidades', 'getUnidades')->name('unidades.getUnidades');
+        });
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Tiempos
+        Route::controller(TiempoController::class)->prefix('tiempos')->group(function () {
+            Route::get('', 'index')->name('tiempos.index');
+            Route::get('crear', 'create')->name('tiempos.create');
+            Route::get('editar/{id}', 'edit')->name('tiempos.edit');
+            Route::post('guardar', 'store')->name('tiempos.store');
+            Route::put('actualizar/{id}', 'update')->name('tiempos.update');
+            Route::get('active', 'active')->name('tiempos.active');
+        });
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Productos
+        Route::controller(ProductoController::class)->prefix('productos')->group(function () {
+            Route::get('', 'index')->name('productos.index');
+            Route::get('crear', 'create')->name('productos.create');
+            Route::get('editar/{id}', 'edit')->name('productos.edit');
+            Route::post('guardar', 'store')->name('productos.store');
+            Route::put('actualizar/{id}', 'update')->name('productos.update');
+            Route::get('active', 'active')->name('productos.active');
+        });
         // ----------------------------------------------------------------------------------------
     });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     Route::middleware(Empleado::class)->group(function () {
-
-        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Areas
+        Route::controller(FacturacionController::class)->prefix('facturacion')->group(function () {
+            Route::get('', 'index')->name('facturacion.index');
+            // ------------------------------------------------------------------------------------
+            Route::controller(RegistroFactController::class)->prefix('registro')->group(function () {
+                Route::get('', 'index')->name('facturacion.registro.index');
+                Route::post('guardar', 'store')->name('facturacion.registro.store');
+            });
+            // ------------------------------------------------------------------------------------
+        });
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Empresa;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Empresa\Area\ValidacionArea;
 use App\Models\Empresa\Area;
+use App\Models\Empresa\Clinica;
 use App\Models\Empresa\EmpGrupo;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,16 +17,9 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
-        $roles = collect($usuario->roles);
-        $grupos = EmpGrupo::get();
         $areas = Area::get();
-        if ($usuario->hasRole('Super Administrador')) {
-            return view('intranet.empresa.area.index_admin', compact('grupos'));
-        } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.area.index', compact('grupo'));
-        }
+        $clinicas = Clinica::get();
+        return view('intranet.clinica.area.index', compact('clinicas','areas'));
     }
 
     /**
@@ -33,21 +27,20 @@ class AreaController extends Controller
      */
     public function create()
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
-        if ($usuario->hasRole('Super Administrador')) {
-            $grupos = EmpGrupo::get();
-            return view('intranet.empresa.area.crear', compact('grupos'));
+        if (session('rol_principal_id')<3) {
+            $clinicas = Clinica::get();
         } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.area.crear', compact('grupo'));
+            $clinicas = Clinica::where('id',session('clinica_id'))->get();
         }
+        return view('intranet.clinica.area.crear', compact('clinicas'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ValidacionArea $request)
+    public function store(Request $request)
     {
+        $request['area'] = ucfirst($request['area']);
         Area::create($request->all());
         return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área creada con éxito');
     }
@@ -65,15 +58,14 @@ class AreaController extends Controller
      */
     public function edit(string $id)
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
         $area_edit = Area::findOrFail($id);
-        if ($usuario->hasRole('Super Administrador')) {
-            $grupos = EmpGrupo::get();
-            return view('intranet.empresa.area.editar', compact('grupos','area_edit'));
+        if (session('rol_principal_id')<3) {
+            $clinicas = Clinica::get();
         } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.area.editar', compact('grupo','area_edit'));
+            $clinicas = Clinica::where('id',session('clinica_id'))->get();
         }
+
+        return view('intranet.clinica.area.editar', compact('clinicas','area_edit'));
     }
 
     /**
@@ -81,6 +73,7 @@ class AreaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request['area'] = ucfirst($request['area']);
         Area::findOrFail($id)->update($request->all());
         return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área actualizada con exito');
     }
@@ -91,8 +84,8 @@ class AreaController extends Controller
     public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
-            $empresa = Area::findOrFail($id);
-            if ($empresa->cargos->count() > 0) {
+            $area = Area::findOrFail($id);
+            if ($area->cargos->count() > 0 || $area->areas->count()>0) {
                 return response()->json(['mensaje' => 'ng']);
             } else {
                 if (Area::destroy($id)) {
@@ -115,7 +108,7 @@ class AreaController extends Controller
     }
     public function getAreas(Request $request){
         if ($request->ajax()) {
-            return response()->json(['areasPadre' => Area::with('area_sup')->with('areas')->where('empresa_id',$_GET['id'])->get()]);
+            return response()->json(['areasPadre' => Area::with('area_sup')->with('areas')->where('clinica_id',$_GET['id'])->get()]);
         } else {
             abort(404);
         }

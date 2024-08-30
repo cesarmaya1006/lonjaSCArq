@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             TablaAreas::class,
             TablaCargos::class,
             TablaUsuariosSeeder::class,
+            TablaUnidades::class,
+            TablaTiempos::class,
+            TablaProductos::class,
         ]);
     }
 }

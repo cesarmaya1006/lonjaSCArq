@@ -29,7 +29,7 @@
     <form class="col-12 form-horizontal" action="{{ route('areas.store') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
         @method('post')
-        @include('intranet.empresa.area.form')
+        @include('intranet.clinica.area.form')
         <div class="row mt-5">
             <div class="col-12 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
                 <button type="submit" class="btn btn-primary btn-sm mini_sombra pl-sm-5 pr-sm-5" style="font-size: 0.8em;">Guardar</button>
@@ -46,5 +46,5 @@
 @endsection
 
 @section('scripts_pagina')
-<script src="{{ asset('js/intranet/empresa/area/crear.js') }}"></script>
+<script src="{{ asset('js/intranet/clinica/area/crear.js') }}"></script>
 @endsection

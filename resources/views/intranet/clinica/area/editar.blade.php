@@ -10,7 +10,7 @@
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
     <li class="breadcrumb-item"><a href="{{ route('areas.index') }}">Áreas</a></li>
-    <li class="breadcrumb-item active">Áreas - Crear</li>
+    <li class="breadcrumb-item active">Áreas - Editar</li>
 @endsection
 
 @section('titulo_card')
@@ -29,7 +29,7 @@
     <form class="col-12 form-horizontal" action="{{ route('areas.update',['id'=>$area_edit]) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
         @method('put')
-        @include('intranet.empresa.area.form')
+        @include('intranet.clinica.area.form')
         <div class="row mt-5">
             <div class="col-12 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
                 <button type="submit" class="btn btn-primary btn-sm mini_sombra pl-sm-5 pr-sm-5" style="font-size: 0.8em;">Actualizar</button>

@@ -2,11 +2,10 @@
 @section('css_pagina')
 @endsection
 @section('titulo_pagina')
-<i class="fas fa-list-ul mr-3" aria-hidden="true"></i>    Configuración Menus
+<i class="fas fa-list-ul mr-3" aria-hidden="true"></i>    DashDoard
 @endsection
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Inicio</a></li>
-    <li class="breadcrumb-item active">Menús</li>
 @endsection
 @section('titulo_card')
 Listado de Menus

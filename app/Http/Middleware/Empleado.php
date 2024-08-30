@@ -27,7 +27,7 @@ class Empleado
         foreach (session('roles') as $rol) {
             $rolArray[] = $rol['name'];
         }
-        return in_array("Super Administrador", $rolArray)||in_array("Empleado", $rolArray);
+        return in_array("Super Administrador", $rolArray)||in_array("Administrador", $rolArray)||in_array("Administrador Empresa", $rolArray)||in_array("Empleado", $rolArray);
 
     }
 }

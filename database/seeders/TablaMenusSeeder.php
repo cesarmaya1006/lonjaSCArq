@@ -65,10 +65,25 @@ class TablaMenusSeeder extends Seeder
 
                         ]
                     ],
+                    // Modulo Configuracion Facturacion
+                    [
+                        'nombre' => 'Parametrización', 'menu_id' => '2',  'url' => '#', 'orden' => '1',  'icono' => 'fas fa-cogs',
+                        'Array_1' => [
+                            //Menu unidades
+                            ['nombre' => 'Unidades', 'menu_id' => '2',  'url' => 'dashboard/configuracion/unidades', 'orden' => '1',  'icono' => 'fas fa-grip-horizontal', 'Array_1' => []],
+                            //Menu tiempos
+                            ['nombre' => 'Tiempos', 'menu_id' => '2',  'url' => 'dashboard/configuracion/tiempos', 'orden' => '2',  'icono' => 'fas fa-clock', 'Array_1' => []],
+                            //Menu servicios
+                            ['nombre' => 'Productos Facturables', 'menu_id' => '2',  'url' => 'dashboard/configuracion/productos', 'orden' => '2',  'icono' => 'fas fa-drumstick-bite', 'Array_1' => []],
+
+                        ]
+                    ],
 
                 ],
             ],
-            // Modulo archivo
+            // Modulo facturacion
+            ['nombre' => 'Módulo Facturación', 'menu_id' => null, 'url' => 'dashboard/facturacion', 'icono' => 'fas fa-file-invoice-dollar', 'Array_1' => []],
+            // Modulo noticias
             ['nombre' => 'Noticias', 'menu_id' => null, 'url' => 'dashboard/noticias', 'icono' => 'fas fa-newspaper', 'Array_1' => []],
         ];
         // ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== ==========
@@ -95,10 +110,10 @@ class TablaMenusSeeder extends Seeder
             DB::table('menu_rol')->insert(['menu_id' => $menu->id, 'rol_id' => 1,]);
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
-        DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 2,]);
+        /*DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 2,]);
         for ($i = 17; $i < 34; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 2,]);
-        }
+        }*/
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
     }
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

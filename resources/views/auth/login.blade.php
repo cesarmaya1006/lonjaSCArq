@@ -1,1 +1,1 @@
-@include('extranet.logins.login_mgl')
+@include('extranet.logins.login1')

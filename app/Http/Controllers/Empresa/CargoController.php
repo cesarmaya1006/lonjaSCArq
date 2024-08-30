@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Empresa;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Area;
 use App\Models\Empresa\Cargo;
+use App\Models\Empresa\Clinica;
 use App\Models\Empresa\EmpGrupo;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,14 +17,12 @@ class CargoController extends Controller
      */
     public function index()
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
-        $grupos = EmpGrupo::get();
-        if ($usuario->hasRole('Super Administrador')) {
-            return view('intranet.empresa.cargo.index', compact('grupos'));
+        if (session('rol_principal_id')<3) {
+            $clinicas = Clinica::get();
         } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.cargo.index', compact('grupo'));
+            $clinicas = Clinica::where('id',session('clinica_id'))->get();
         }
+        return view('intranet.clinica.cargo.index', compact('clinicas'));
     }
 
     /**
@@ -31,14 +30,14 @@ class CargoController extends Controller
      */
     public function create()
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
-        if ($usuario->hasRole('Super Administrador')) {
-            $grupos = EmpGrupo::get();
-            return view('intranet.empresa.cargo.crear', compact('grupos'));
+        if (session('rol_principal_id')<3) {
+            $clinicas = Clinica::get();
         } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.cargo.crear', compact('grupo'));
+            $clinicas = Clinica::where('id',session('clinica_id'))->get();
         }
+        return view('intranet.clinica.cargo.crear', compact('clinicas'));
+
+
     }
 
     /**
@@ -46,6 +45,7 @@ class CargoController extends Controller
      */
     public function store(Request $request)
     {
+        $request['cargo'] = ucfirst($request['cargo']);
         Cargo::create($request->all());
         return redirect('dashboard/configuracion/cargos')->with('mensaje', 'Cargo creado con éxito');
     }
@@ -63,15 +63,13 @@ class CargoController extends Controller
      */
     public function edit(string $id)
     {
-        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
         $cargo_edit = Cargo::findOrFail($id);
-        if ($usuario->hasRole('Super Administrador')) {
-            $grupos = EmpGrupo::get();
-            return view('intranet.empresa.cargo.editar', compact('grupos','cargo_edit'));
+        if (session('rol_principal_id')<3) {
+            $clinicas = Clinica::get();
         } else {
-            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
-            return view('intranet.empresa.cargo.editar', compact('grupo','cargo_edit'));
+            $clinicas = Clinica::where('id',session('clinica_id'))->get();
         }
+        return view('intranet.clinica.cargo.editar', compact('clinicas','cargo_edit'));
     }
 
     /**
@@ -79,6 +77,7 @@ class CargoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request['cargo'] = ucfirst($request['cargo']);
         Cargo::findOrFail($id)->update($request->all());
         return redirect('dashboard/configuracion/cargos')->with('mensaje', 'Cargo actualizado con éxito');
     }
@@ -89,8 +88,8 @@ class CargoController extends Controller
     public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
-            $empresa = Cargo::findOrFail($id);
-            if ($empresa->empleados->count() > 0) {
+            $cargo = Cargo::findOrFail($id);
+            if ($cargo->empleados->count() > 0) {
                 return response()->json(['mensaje' => 'ng']);
             } else {
                 if (Cargo::destroy($id)) {
@@ -106,7 +105,7 @@ class CargoController extends Controller
 
     public function getAreas(Request $request){
         if ($request->ajax()) {
-            return response()->json(['areas' => Area::with('cargos')->with('cargos.area')->where('empresa_id',$_GET['id'])->get()]);
+            return response()->json(['areas' => Area::with('cargos')->with('cargos.area')->where('clinica_id',$_GET['id'])->get()]);
         } else {
             abort(404);
         }
@@ -120,9 +119,9 @@ class CargoController extends Controller
     }
     public function getCargosTodos(Request $request){
         if ($request->ajax()) {
-            $empresa_id = $_GET['id'];
-            return response()->json(['cargos' => Cargo::with('area')->whereHas('area', function($q) use($empresa_id){
-                $q->where('empresa_id', $empresa_id);
+            $clinica_id = $_GET['id'];
+            return response()->json(['cargos' => Cargo::with('area')->whereHas('area', function($q) use($clinica_id){
+                $q->where('clinica_id', $clinica_id);
             })->get()]);
         } else {
             abort(404);
