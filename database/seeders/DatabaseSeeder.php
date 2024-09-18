@@ -17,13 +17,9 @@ class DatabaseSeeder extends Seeder
             TablaTiposDocuSeeder::class,
             TablaRolesSeeder::class,
             TablaMenusSeeder::class,
-            TablaClinicaSeeder::class,
             TablaAreas::class,
             TablaCargos::class,
             TablaUsuariosSeeder::class,
-            TablaUnidades::class,
-            TablaTiempos::class,
-            TablaProductos::class,
         ]);
     }
 }

@@ -41,33 +41,7 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'cargos.update'])->syncRoles([$rol1, $rol2]);
         Permission::create(['name' => 'cargos.destroy'])->syncRoles([$rol1, $rol2]);
         // =======================================================================================================
-        //Facturacion
-        Permission::create(['name' => 'facturacion.index'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'facturacion.registro.index'])->syncRoles([$rol1, $rol2]);
-        // =======================================================================================================
-        //Unidades
-        Permission::create(['name' => 'unidades.index'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'unidades.create'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'unidades.edit'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'unidades.store'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'unidades.update'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'unidades.active'])->syncRoles([$rol1, $rol2]);
-        // =======================================================================================================
-        //Tiempos
-        Permission::create(['name' => 'tiempos.index'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'tiempos.create'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'tiempos.edit'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'tiempos.store'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'tiempos.update'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'tiempos.active'])->syncRoles([$rol1, $rol2]);
-        // =======================================================================================================
-        //Productos
-        Permission::create(['name' => 'productos.index'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'productos.create'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'productos.edit'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'productos.store'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'productos.update'])->syncRoles([$rol1, $rol2]);
-        Permission::create(['name' => 'productos.active'])->syncRoles([$rol1, $rol2]);
+
 
 
 
