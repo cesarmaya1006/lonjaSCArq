@@ -22,8 +22,11 @@ class TablaRolesSeeder extends Seeder
         $rol1 = Role::create(['name' => 'Super Administrador']);
         $rol2 = Role::create(['name' => 'Administrador']);
         $rol3 = Role::create(['name' => 'Empleado']);
+        $rol4 = Role::create(['name' => 'Usuario']);
+        $rol5 = Role::create(['name' => 'Arquitecto']);
+        $rol6 = Role::create(['name' => 'Empleado Constructora']);
         // =======================================================================================================
-        Permission::create(['name' => 'dashboard'])->syncRoles([$rol1, $rol2, $rol3]);
+        Permission::create(['name' => 'dashboard'])->syncRoles([$rol1, $rol2, $rol3, $rol4, $rol5, $rol6]);
         // =======================================================================================================
         //Areas
         Permission::create(['name' => 'areas.index'])->syncRoles([$rol1, $rol2]);

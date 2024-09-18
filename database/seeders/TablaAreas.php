@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Empresa\Clinica;
+use App\Models\Empresa\Regional;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,31 +21,19 @@ class TablaAreas extends Seeder
         $datas = [
             [
                 'area_id' => null,
-                'empresa_id' => 1,
-                'area' => 'Gerencia',
+                'area' => 'Dirección',
             ],
         ];
 
-        $clinicas = Clinica::get();
-
-        $x = 1;
-        $y = 1;
-
-        foreach ($clinicas as $clinica) {
+        $regionales = Regional::get();
+        foreach ($regionales as $regional) {
             foreach ($datas as $data) {
-                if ($data['area_id'] == null) {
-                    $y = $x;
-                } else {
-                    $data['area_id'] = $y;
-                }
-
                 DB::table('areas')->insert([
                     'area_id' => $data['area_id'],
-                    'clinica_id' => $clinica->id,
+                    'regional_id' => $regional->id,
                     'area' => $data['area'],
                     'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 ]);
-                $x++;
             }
         }
     }

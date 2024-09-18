@@ -71,18 +71,12 @@ class TablaMenusSeeder extends Seeder
                         'Array_1' => [
                             //Menu unidades
                             ['nombre' => 'Unidades', 'menu_id' => '2',  'url' => 'dashboard/configuracion/unidades', 'orden' => '1',  'icono' => 'fas fa-grip-horizontal', 'Array_1' => []],
-                            //Menu tiempos
-                            ['nombre' => 'Tiempos', 'menu_id' => '2',  'url' => 'dashboard/configuracion/tiempos', 'orden' => '2',  'icono' => 'fas fa-clock', 'Array_1' => []],
-                            //Menu servicios
-                            ['nombre' => 'Productos Facturables', 'menu_id' => '2',  'url' => 'dashboard/configuracion/productos', 'orden' => '2',  'icono' => 'fas fa-drumstick-bite', 'Array_1' => []],
 
                         ]
                     ],
 
                 ],
             ],
-            // Modulo facturacion
-            ['nombre' => 'Módulo Facturación', 'menu_id' => null, 'url' => 'dashboard/facturacion', 'icono' => 'fas fa-file-invoice-dollar', 'Array_1' => []],
             // Modulo noticias
             ['nombre' => 'Noticias', 'menu_id' => null, 'url' => 'dashboard/noticias', 'icono' => 'fas fa-newspaper', 'Array_1' => []],
         ];

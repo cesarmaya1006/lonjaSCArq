@@ -14,9 +14,9 @@ class Area extends Model
 
     //==================================================================================
     //----------------------------------------------------------------------------------
-    public function clinica()
+    public function regional()
     {
-        return $this->belongsTo(Clinica::class, 'clinica_id', 'id');
+        return $this->belongsTo(Regional::class, 'regional_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function cargos()

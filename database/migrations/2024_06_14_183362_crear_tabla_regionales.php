@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('areas', function (Blueprint $table) {
+        Schema::create('regionales', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
-            $table->unsignedBigInteger('area_id')->nullable();
-            $table->foreign('area_id', 'fk_area_area')->references('id')->on('areas')->onDelete('restrict')->onUpdate('restrict');
-            $table->unsignedBigInteger('regional_id');
-            $table->foreign('regional_id', 'fk_area_regionales')->references('id')->on('regionales')->onDelete('restrict')->onUpdate('restrict');
-            $table->string('area');
+            $table->unsignedBigInteger('departamento_id')->nullable();
+            $table->foreign('departamento_id', 'fk_regional_departamento')->references('id')->on('departamentos')->onDelete('restrict')->onUpdate('restrict');
+            $table->string('regional');
+            $table->boolean('estado')->default(1);
+            $table->boolean('nacional')->default(0);
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_spanish_ci';
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('areas');
+        Schema::dropIfExists('regionales');
     }
 };

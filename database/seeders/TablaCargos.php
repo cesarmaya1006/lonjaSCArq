@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Empresa\Area;
 use App\Models\Empresa\Cargo;
+use App\Models\Empresa\Regional;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -26,22 +28,23 @@ class TablaCargos extends Seeder
 
         $datas = [
             [
-                'area_id' => 1,
-                'cargo' => 'Gerente General',
+                'cargo' => 'Director',
             ],
 
         ];
 
+        $areas = Area::get();
         $permisos = Permission::get();
-
-        foreach ($datas as $data) {
-            $cargo = Cargo::create([
-                'area_id' => $data['area_id'],
-                'cargo' => $data['cargo'],
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            ]);
-            foreach ($permisos as $permiso) {
-                $cargo->cargos_permisos()->attach($permiso->id);
+        foreach ($areas as $area) {
+            foreach ($datas as $data) {
+                $cargo = Cargo::create([
+                    'area_id' => $area->id,
+                    'cargo' => $data['cargo'],
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                ]);
+                foreach ($permisos as $permiso) {
+                    $cargo->cargos_permisos()->attach($permiso->id);
+                }
             }
         }
     }
