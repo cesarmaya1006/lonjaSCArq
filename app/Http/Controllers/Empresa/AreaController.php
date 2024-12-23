@@ -7,6 +7,7 @@ use App\Http\Requests\Empresa\Area\ValidacionArea;
 use App\Models\Empresa\Area;
 use App\Models\Empresa\Clinica;
 use App\Models\Empresa\EmpGrupo;
+use App\Models\Empresa\Regional;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -17,9 +18,8 @@ class AreaController extends Controller
      */
     public function index()
     {
-        $areas = Area::get();
-        $clinicas = Clinica::get();
-        return view('intranet.clinica.area.index', compact('clinicas','areas'));
+        $regionales = Regional::get();
+        return view('intranet.regionales.area.index', compact('regionales'));
     }
 
     /**
@@ -27,12 +27,8 @@ class AreaController extends Controller
      */
     public function create()
     {
-        if (session('rol_principal_id')<3) {
-            $clinicas = Clinica::get();
-        } else {
-            $clinicas = Clinica::where('id',session('clinica_id'))->get();
-        }
-        return view('intranet.clinica.area.crear', compact('clinicas'));
+        $regionales = Regional::get();
+        return view('intranet.regionales.area.crear', compact('regionales'));
     }
 
     /**
@@ -40,7 +36,7 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        $request['area'] = ucfirst($request['area']);
+        $request['area'] = ucfirst(strtolower($request['area']));
         Area::create($request->all());
         return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área creada con éxito');
     }
@@ -59,13 +55,9 @@ class AreaController extends Controller
     public function edit(string $id)
     {
         $area_edit = Area::findOrFail($id);
-        if (session('rol_principal_id')<3) {
-            $clinicas = Clinica::get();
-        } else {
-            $clinicas = Clinica::where('id',session('clinica_id'))->get();
-        }
+        $regionales = Regional::get();
 
-        return view('intranet.clinica.area.editar', compact('clinicas','area_edit'));
+        return view('intranet.regionales.area.editar', compact('regionales','area_edit'));
     }
 
     /**
@@ -73,7 +65,7 @@ class AreaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request['area'] = ucfirst($request['area']);
+        $request['area'] = ucfirst(strtolower($request['area']));
         Area::findOrFail($id)->update($request->all());
         return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área actualizada con exito');
     }
@@ -108,7 +100,7 @@ class AreaController extends Controller
     }
     public function getAreas(Request $request){
         if ($request->ajax()) {
-            return response()->json(['areasPadre' => Area::with('area_sup')->with('areas')->where('clinica_id',$_GET['id'])->get()]);
+            return response()->json(['areasPadre' => Area::with('area_sup')->with('areas')->where('regional_id',$_GET['id'])->get()]);
         } else {
             abort(404);
         }

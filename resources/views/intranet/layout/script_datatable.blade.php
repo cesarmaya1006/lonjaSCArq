@@ -15,7 +15,6 @@
 <script src="{{ asset('js/intranet/general/datatablesini.js') }}"></script>
 <script>
     function asignarDataTableAjax(table_id,titulo_tabla) {
-        console.log('entra a script');
         $(table_id).DataTable({
             bSort: false,
             lengthMenu: [10, 15, 25, 50, 75, 100],

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
+use App\Models\Empresa\Arquitecto;
 use App\Models\Empresa\Empleado;
+use App\Models\Empresa\Inmueble;
+use App\Models\Empresa\Publicidad;
 use App\Models\Sistema\Mensaje;
 use App\Models\Sistema\Notificacion;
 use App\Models\User;
@@ -26,14 +29,15 @@ class PageController extends Controller
         $roles = substr($roles, 1);
         $roles = str_replace('"','', $roles);
         $roles = explode(',',$roles);
+        //$inmuebles = $this->inmueblesArq();
+        //dd($inmuebles->toArray());
         if ($usuario->empleado && $usuario->empleado->estado == 0) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             return redirect('/')->with(['errores' => 'Usuario Deshabilitado']);
         }else{
-            //dd($usuario->toArray());
-            return view('dashboard',compact('roles'));
+            return view('dashboard',compact('roles','usuario'));
         }
     }
 
@@ -215,6 +219,24 @@ class PageController extends Controller
         }
     }
 
+    public function getPublicidadCinta(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['publicidad'=> Publicidad::where('estado',1)->where('tipo','Cinta')->where('rol_id',session('rol_principal_id'))->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+
+    public function getPublicidadLateral(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['publicidad'=> Publicidad::where('estado',1)->where('tipo','Lateral')->where('rol_id',session('rol_principal_id'))->get()]);
+        } else {
+            abort(404);
+        }
+    }
 
     public function get_format($df) {
 
@@ -241,5 +263,40 @@ class PageController extends Controller
         }
 
         return $str;
+    }
+    private function inmueblesArq()
+    {
+        $arquitecto = Arquitecto::findOrFail(session('id_usuario'));
+        $query = Inmueble::with('municipio', 'multimedia', 'municipio.departamento', 'tipo')->where('estado', 'activo');
+        if ($arquitecto->arquitecto_tipoinmuebles()->count() > 0) {
+            $query->wherein('tipo_inmueble_id', $arquitecto->arquitecto_tipoinmuebles()->pluck('id'));
+        }
+        if ($arquitecto->arquitecto_departamentos()->count() > 0) {
+            $query->whereHas('municipio', function ($p) use ($arquitecto) {
+                $p->wherein('departamento_id', $arquitecto->arquitecto_departamentos()->pluck('id'));
+            });
+        }
+        if ($arquitecto->arquitecto_municipios()->count() > 0) {
+            $query->wherein('municipio_id', $arquitecto->arquitecto_municipios()->pluck('id'));
+        }
+        if ($arquitecto->arquitecto_inmuebles->count() > 0) {
+            foreach ($arquitecto->arquitecto_inmuebles as $preferencia) {
+                $query->where('ubicacion', $preferencia->ubicacion)->where('avaluo_corporativo', $preferencia->avaluo_corporativo);
+                if ($preferencia->precio_min > 0) {
+                    $query->where('precio', '>', $preferencia->precio_min);
+                }
+                if ($preferencia->precio_max > 0) {
+                    $query->where('precio', '<', $preferencia->precio_max);
+                }
+                if ($preferencia->area_minima > 0) {
+                    $query->where('area', '>', $preferencia->area_minima)->where('tipo_area', $preferencia->tipo_area);
+                }
+                if ($preferencia->area_maxima > 0) {
+                    $query->where('area', '<', $preferencia->area_maxima)->where('tipo_area', $preferencia->tipo_area);
+                }
+            }
+        }
+        $inmuebles = $query->get();
+        return $inmuebles;
     }
 }

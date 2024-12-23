@@ -1,22 +1,28 @@
 <?php
 
-use App\Http\Controllers\Clinica\ProductoController;
-use App\Http\Controllers\Clinica\TiempoController;
-use App\Http\Controllers\Clinica\UnidadController;
 use App\Http\Controllers\Config\MenuController;
 use App\Http\Controllers\Config\MenuRolController;
 use App\Http\Controllers\Config\PageController;
 use App\Http\Controllers\Config\PermisoController;
 use App\Http\Controllers\Config\PermisoRolController;
 use App\Http\Controllers\Config\RolController;
+use App\Http\Controllers\Config\UsuarioController;
 use App\Http\Controllers\Empresa\AreaController;
+use App\Http\Controllers\Empresa\ArquitectoController;
 use App\Http\Controllers\Empresa\CargoController;
-use App\Http\Controllers\Empresa\ClinicaController;
+use App\Http\Controllers\Empresa\ConstrucAreaController;
+use App\Http\Controllers\Empresa\ConstrucCargoController;
+use App\Http\Controllers\Empresa\ConstrucEmpleadoController;
+use App\Http\Controllers\Empresa\ConstructoraController;
 use App\Http\Controllers\Empresa\EmpleadoController;
+use App\Http\Controllers\Empresa\InmuebleController;
+use App\Http\Controllers\Empresa\PublicidadController;
+use App\Http\Controllers\Empresa\RegionalController;
+use App\Http\Controllers\Empresa\TipoInmuebleController;
+use App\Http\Controllers\Empresa\UsuarioController as EmpresaUsuarioController;
 use App\Http\Controllers\Extranet\ExtranetPageController;
-use App\Http\Controllers\Facturacion\FacturacionController;
-use App\Http\Controllers\Facturacion\RegistroFactController;
 use App\Http\Middleware\AdminEmp;
+use App\Http\Middleware\Arquitecto;
 use App\Http\Middleware\Empleado;
 use App\Http\Middleware\SuperAdmin;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +33,6 @@ Route::controller(ExtranetPageController::class)->group(function () {
     Route::get('/registro', 'registro')->name('extranet.registro');
     Route::get('/loginapp', 'loginapp')->name('extranet.loginapp');
     Route::post('/register', 'register')->name('extranet.store');
-
 });
 Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_session'),])->group(function () {
     Route::get('', [PageController::class, 'dashboard'])->name('dashboard');
@@ -78,9 +83,33 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         });
         // ----------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Regionales
+        Route::controller(RegionalController::class)->prefix('regionales')->group(function () {
+            Route::get('', 'index')->name('regionales.index');
+            Route::get('crear', 'create')->name('regionales.create');
+            Route::get('editar/{id}', 'edit')->name('regionales.edit');
+            Route::post('guardar', 'store')->name('regionales.store');
+            Route::put('actualizar/{id}', 'update')->name('regionales.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('regionales.destroy');
+            Route::get('getRegionales', 'getRegionales')->name('regionales.getRegionales');
+            Route::get('getRegionalesActivar', 'getRegionalesActivar')->name('regionales.getRegionalesActivar');
+        });
+        // ------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------
     });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     Route::prefix('configuracion')->middleware(AdminEmp::class)->group(function () {
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Areas
+        Route::controller(PublicidadController::class)->prefix('publicidad')->group(function () {
+            Route::get('', 'index')->name('publicidad.index');
+            Route::get('crear', 'create')->name('publicidad.create');
+            Route::get('editar/{id}', 'edit')->name('publicidad.edit');
+            Route::post('guardar', 'store')->name('publicidad.store');
+            Route::put('actualizar/{id}', 'update')->name('publicidad.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('publicidad.destroy');
+            Route::get('activar', 'activar')->name('publicidad.activar');
+        });
         // ------------------------------------------------------------------------------------
         // Ruta Administrador del Sistema Areas
         Route::controller(AreaController::class)->prefix('areas')->group(function () {
@@ -103,8 +132,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::put('actualizar/{id}', 'update')->name('cargos.update');
             Route::delete('eliminar/{id}', 'destroy')->name('cargos.destroy');
             Route::get('getCargos', 'getCargos')->name('cargos.getCargos');
+            Route::get('getAreasCargos', 'getAreasCargos')->name('cargos.getAreasCargos');
             Route::get('getCargosTodos', 'getCargosTodos')->name('cargos.getCargosTodos');
             Route::get('getAreas', 'getAreas')->name('cargos.getAreas');
+            Route::get('getCargosByArea', 'getCargosByArea')->name('cargos.getCargosByArea');
         });
         // ----------------------------------------------------------------------------------------
         // Ruta Administrador del Sistema Empleados
@@ -116,23 +147,113 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::put('actualizar/{id}', 'update')->name('empleados.update');
             Route::delete('eliminar/{id}', 'destroy')->name('empleados.destroy');
             Route::put('activar/{id}', 'activar')->name('empleados.activar');
-            Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
+            Route::get('getEmpleadosRegional', 'getEmpleadosRegional')->name('empleados.getEmpleadosRegional');
             // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
-            Route::get('getEmpresas', 'getEmpresas')->name('empleados.getEmpresas');
-            Route::get('getAreas', 'getAreas')->name('empleados.getAreas');
-            Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
-            Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
-
-            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
-            Route::get('setDeshabilitarEmpleado', 'setDeshabilitarEmpleado')->name('empleados.setDeshabilitarEmpleado');
         });
-        // ------------------------------------------------------------------------------------
-
+        // ----------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Usuarios
+        Route::controller(EmpresaUsuarioController::class)->prefix('usuarios')->group(function () {
+            Route::get('', 'index')->name('usuarios.index');
+            Route::get('crear', 'create')->name('usuarios.create');
+            Route::get('editar/{id}', 'edit')->name('usuarios.edit');
+            Route::post('guardar', 'store')->name('usuarios.store');
+            Route::put('actualizar/{id}', 'update')->name('usuarios.update');
+            Route::put('activar/{id}', 'activar')->name('usuarios.activar');
+            Route::get('getUsuariosRegional', 'getUsuariosRegional')->name('usuarios.getUsuariosRegional');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+        });
+        // ----------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Arquitectos
+        Route::controller(ArquitectoController::class)->prefix('arquitectos')->group(function () {
+            Route::get('', 'index')->name('arquitectos.index');
+            Route::get('crear', 'create')->name('arquitectos.create');
+            Route::get('editar/{id}', 'edit')->name('arquitectos.edit');
+            Route::post('guardar', 'store')->name('arquitectos.store');
+            Route::put('actualizar/{id}', 'update')->name('arquitectos.update');
+            Route::put('activar/{id}', 'activar')->name('arquitectos.activar');
+            Route::get('getArquitectosRegional', 'getArquitectosRegional')->name('arquitectos.getArquitectosRegional');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+        });
+        // ----------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Constructoras
+        Route::controller(ConstructoraController::class)->prefix('constructoras')->group(function () {
+            Route::get('', 'index')->name('constructoras.index');
+            Route::get('crear', 'create')->name('constructoras.create');
+            Route::get('editar/{id}', 'edit')->name('constructoras.edit');
+            Route::post('guardar', 'store')->name('constructoras.store');
+            Route::put('actualizar/{id}', 'update')->name('constructoras.update');
+            Route::put('activar/{id}', 'activar')->name('constructoras.activar');
+            Route::get('getconstructorasRegional', 'getconstructorasRegional')->name('constructoras.getconstructorasRegional');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+            // ------------------------------------------------------------------------------------
+            // Ruta Administrador del Sistema Areas
+            Route::controller(ConstrucAreaController::class)->prefix('areas')->group(function () {
+                Route::get('crear/{id}', 'create')->name('constructora.areas.create');
+                Route::get('editar/{constructora_id}/{id}', 'edit')->name('constructora.areas.edit');
+                Route::post('guardar', 'store')->name('constructora.areas.store');
+                Route::put('actualizar/{constructora_id}/{id}', 'update')->name('constructora.areas.update');
+                Route::get('getDependencias/{id}', 'getDependencias')->name('constructora.areas.getDependencias');
+                Route::get('getAreas', 'getAreas')->name('constructora.areas.getAreas');
+            });
+            // ------------------------------------------------------------------------------------
+            // Ruta Administrador del Sistema Cargos
+            Route::controller(ConstrucCargoController::class)->prefix('cargos')->group(function () {
+                Route::get('crear/{id}', 'create')->name('constructora.cargos.create');
+                Route::get('editar/{constructora_id}/{id}', 'edit')->name('constructora.cargos.edit');
+                Route::post('guardar', 'store')->name('constructora.cargos.store');
+                Route::put('actualizar/{constructora_id}/{id}', 'update')->name('constructora.cargos.update');
+                Route::get('getDependencias/{id}', 'getDependencias')->name('constructora.cargos.getDependencias');
+                Route::get('getCargos', 'getCargos')->name('constructora.cargos.getCargos');
+            });
+            // ------------------------------------------------------------------------------------
+            // Ruta Administrador del Sistema Empleados Constructoras
+            Route::controller(ConstrucEmpleadoController::class)->prefix('empleados')->group(function () {
+                Route::get('crear/{id}', 'create')->name('constructora.empleados.create');
+                Route::get('editar/{constructora_id}/{id}', 'edit')->name('constructora.empleados.edit');
+                Route::post('guardar', 'store')->name('constructora.empleados.store');
+                Route::put('actualizar/{constructora_id}/{id}', 'update')->name('constructora.empleados.update');
+                Route::get('getDependencias/{id}', 'getDependencias')->name('constructora.empleados.getDependencias');
+                Route::get('getEmpleados', 'getEmpleados')->name('constructora.empleados.getEmpleados');
+            });
+            // ----------------------------------------------------------------------------------------
+        });
         // ----------------------------------------------------------------------------------------
     });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    // ------------------------------------------------------------------------------------
+    // Ruta Inmuebles
+    Route::controller(InmuebleController::class)->prefix('inmuebles')->group(function () {
+        Route::get('crear', 'create')->name('inmuebles.create');
+        Route::post('guardar', 'store')->name('inmuebles.store');
+        Route::get('editar/{id}', 'edit')->name('inmuebles.edit');
+        Route::put('actualizar/{id}', 'update')->name('inmuebles.update');
+        Route::get('getInmuebles/{id}', 'getInmuebles')->name('inmuebles.getInmuebles');
+        Route::get('getMunicipiosByDepartamento', 'getMunicipiosByDepartamento')->name('inmuebles.getMunicipiosByDepartamento');
+    });
+    // ------------------------------------------------------------------------------------
+    // Ruta Inmuebles
+    Route::controller(TipoInmuebleController::class)->prefix('tipo_inmuebles')->group(function () {
+        Route::get('guardar', 'store')->name('tipo_inmuebles.store');
+        Route::get('editar/{id}', 'edit')->name('tipo_inmuebles.edit');
+        Route::put('actualizar/{id}', 'update')->name('tipo_inmuebles.update');
+    });
+    // ----------------------------------------------------------------------------------------
+    Route::prefix('arquitecto')->middleware(Arquitecto::class)->group(function(){
+        // Ruta Administrador del Sistema Menus
+        // ------------------------------------------------------------------------------------
+        Route::controller(ArquitectoController::class)->group(function () {
+            Route::get('preferencias/{id}', 'preferencias')->name('arquitecto.preferencias');
+            Route::get('getMunicipios', 'getMunicipios')->name('arquitecto.getMunicipios');
+            Route::get('setTipoInmueble', 'setTipoInmueble')->name('arquitecto.setTipoInmueble');
+            Route::get('setDepartamento', 'setDepartamento')->name('arquitecto.setDepartamento');
+            Route::post('setPreferencias', 'setPreferencias')->name('arquitecto.setPreferencias');
+            Route::get('getInmueblesArq', 'getInmueblesArq')->name('arquitecto.getInmueblesArq');
 
 
+
+        });
+        // ------------------------------------------------------------------------------------
+    });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
     Route::get('/getEmpleadosChat', [PageController::class, 'getEmpleadosChat'])->name('getEmpleadosChat');
@@ -142,4 +263,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
     Route::get('/getMensajesNuevosDestinatarioChat', [PageController::class, 'getMensajesNuevosDestinatarioChat'])->name('getMensajesNuevosDestinatarioChat');
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     Route::get('/getNotificacionesEmpleado', [PageController::class, 'getNotificacionesEmpleado'])->name('getNotificacionesEmpleado');
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    Route::get('/getPublicidadCinta', [PageController::class, 'getPublicidadCinta'])->name('getPublicidadCinta');
+    Route::get('/getPublicidadLateral', [PageController::class, 'getPublicidadLateral'])->name('getPublicidadLateral');
+
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 });

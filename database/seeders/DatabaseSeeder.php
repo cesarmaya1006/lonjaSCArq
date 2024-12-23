@@ -22,7 +22,17 @@ class DatabaseSeeder extends Seeder
             TablaRegionales::class,
             TablaAreas::class,
             TablaCargos::class,
+            TablaConstructoras::class,
+
             TablaUsuariosSeeder::class,
+
+
+            TablaTipoInmuebleSeeder::class,
+            TablaInmueblesSeeder::class,
+            TablaPublicidad::class,
+
+
+
         ]);
     }
 }

@@ -43,7 +43,7 @@ class TablaMenusSeeder extends Seeder
                     //Menu permisos-rol
                     ['nombre' => 'Permisos - Roles', 'menu_id' => '2',  'url' => 'dashboard/configuracion_sis/permisos_rol', 'orden' => '2',  'icono' => 'fas fa-user-shield', 'Array_1' => []],
                     //Menu Empresas
-                    ['nombre' => 'Clinicas', 'menu_id' => '2',  'url' => 'dashboard/configuracion_sis/clinicas', 'orden' => '2',  'icono' => 'fas fa-hospital-symbol', 'Array_1' => []],
+                    ['nombre' => 'Regionales', 'menu_id' => '2',  'url' => 'dashboard/configuracion_sis/regionales', 'orden' => '2',  'icono' => 'fas fa-building', 'Array_1' => []],
 
                 ],
             ],
@@ -56,24 +56,24 @@ class TablaMenusSeeder extends Seeder
                         'Array_1' => [
                             //Menu Areas
                             ['nombre' => 'Áreas', 'menu_id' => '2',  'url' => 'dashboard/configuracion/areas', 'orden' => '1',  'icono' => 'fas fa-project-diagram', 'Array_1' => []],
-                            //Menu Roles
+                            //Cargos
                             ['nombre' => 'Cargos', 'menu_id' => '2',  'url' => 'dashboard/configuracion/cargos', 'orden' => '2',  'icono' => 'fas fa-user-tie', 'Array_1' => []],
-                            //Menu Roles
+                            //Empleados
                             ['nombre' => 'Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/empleados', 'orden' => '2',  'icono' => 'fas fa-users', 'Array_1' => []],
-                            //Menu Roles
+                            //Permisos Empleados
                             ['nombre' => 'Permisos Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/permisoscargos', 'orden' => '2',  'icono' => 'fas fa-user-shield', 'Array_1' => []],
+                            //Usuarios
+                            ['nombre' => 'Usuarios', 'menu_id' => '2',  'url' => 'dashboard/configuracion/usuarios', 'orden' => '2',  'icono' => 'fas fa-address-card', 'Array_1' => []],
+                            //Usuarios
+                            ['nombre' => 'Arquitectos', 'menu_id' => '2',  'url' => 'dashboard/configuracion/arquitectos', 'orden' => '2',  'icono' => 'fas fa-id-badge', 'Array_1' => []],
+                            //Usuarios
+                            ['nombre' => 'Constructoras', 'menu_id' => '2',  'url' => 'dashboard/configuracion/constructoras', 'orden' => '2',  'icono' => 'fas fa-gopuram', 'Array_1' => []],
+
 
                         ]
                     ],
                     // Modulo Configuracion Facturacion
-                    [
-                        'nombre' => 'Parametrización', 'menu_id' => '2',  'url' => '#', 'orden' => '1',  'icono' => 'fas fa-cogs',
-                        'Array_1' => [
-                            //Menu unidades
-                            ['nombre' => 'Unidades', 'menu_id' => '2',  'url' => 'dashboard/configuracion/unidades', 'orden' => '1',  'icono' => 'fas fa-grip-horizontal', 'Array_1' => []],
-
-                        ]
-                    ],
+                    ['nombre' => 'Publicidad', 'menu_id' => '2',  'url' => 'dashboard/configuracion/publicidad', 'orden' => '1',  'icono' => 'fas fa-bullhorn','Array_1' => []],
 
                 ],
             ],

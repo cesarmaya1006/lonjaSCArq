@@ -39,7 +39,10 @@ class FortifyServiceProvider extends ServiceProvider
 
             //dd(Fortify::username());
             $usuario = User::where('email',request(['email']))->first();
-            $usuario->setSession();
+            if ($usuario!=null) {
+                $usuario->setSession();
+            }
+
 
 
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());

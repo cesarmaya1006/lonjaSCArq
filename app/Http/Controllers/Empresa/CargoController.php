@@ -7,6 +7,7 @@ use App\Models\Empresa\Area;
 use App\Models\Empresa\Cargo;
 use App\Models\Empresa\Clinica;
 use App\Models\Empresa\EmpGrupo;
+use App\Models\Empresa\Regional;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -17,12 +18,8 @@ class CargoController extends Controller
      */
     public function index()
     {
-        if (session('rol_principal_id')<3) {
-            $clinicas = Clinica::get();
-        } else {
-            $clinicas = Clinica::where('id',session('clinica_id'))->get();
-        }
-        return view('intranet.clinica.cargo.index', compact('clinicas'));
+        $regionales = Regional::get();
+        return view('intranet.regionales.cargo.index', compact('regionales'));
     }
 
     /**
@@ -30,12 +27,8 @@ class CargoController extends Controller
      */
     public function create()
     {
-        if (session('rol_principal_id')<3) {
-            $clinicas = Clinica::get();
-        } else {
-            $clinicas = Clinica::where('id',session('clinica_id'))->get();
-        }
-        return view('intranet.clinica.cargo.crear', compact('clinicas'));
+        $regionales = Regional::get();
+        return view('intranet.regionales.cargo.crear', compact('regionales'));
 
 
     }
@@ -45,7 +38,7 @@ class CargoController extends Controller
      */
     public function store(Request $request)
     {
-        $request['cargo'] = ucfirst($request['cargo']);
+        $request['cargo'] = ucfirst(strtolower($request['cargo']));
         Cargo::create($request->all());
         return redirect('dashboard/configuracion/cargos')->with('mensaje', 'Cargo creado con éxito');
     }
@@ -64,12 +57,8 @@ class CargoController extends Controller
     public function edit(string $id)
     {
         $cargo_edit = Cargo::findOrFail($id);
-        if (session('rol_principal_id')<3) {
-            $clinicas = Clinica::get();
-        } else {
-            $clinicas = Clinica::where('id',session('clinica_id'))->get();
-        }
-        return view('intranet.clinica.cargo.editar', compact('clinicas','cargo_edit'));
+        $regionales = Regional::get();
+        return view('intranet.regionales.cargo.editar', compact('regionales','cargo_edit'));
     }
 
     /**
@@ -77,7 +66,7 @@ class CargoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request['cargo'] = ucfirst($request['cargo']);
+        $request['cargo'] = ucfirst(strtolower($request['cargo']));
         Cargo::findOrFail($id)->update($request->all());
         return redirect('dashboard/configuracion/cargos')->with('mensaje', 'Cargo actualizado con éxito');
     }
@@ -112,7 +101,25 @@ class CargoController extends Controller
     }
     public function getCargos(Request $request){
         if ($request->ajax()) {
-            return response()->json(['cargos' => Cargo::with('area')->where('area_id',$_GET['id'])->get()]);
+            $regional_id = $_GET['id'];
+            return response()->json(['cargos' => Cargo::with('area')->whereHas('area', function($q) use($regional_id){
+                $q->where('regional_id', $regional_id);
+            })->get()]);
+        } else {
+            abort(404);
+        }
+    }
+    public function getCargosByArea(Request $request){
+        if ($request->ajax()) {
+            return response()->json(['cargos' => Cargo::where('area_id',$_GET['id'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+    public function getAreasCargos(Request $request){
+        if ($request->ajax()) {
+            $regional_id = $_GET['id'];
+            return response()->json(['areas' => Area::with('cargos')->with('regional')->where('regional_id',$regional_id)->get()]);
         } else {
             abort(404);
         }

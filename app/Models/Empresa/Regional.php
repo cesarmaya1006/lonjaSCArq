@@ -24,4 +24,14 @@ class Regional extends Model
         return $this->hasMany(Area::class, 'regional_id', 'id');
     }
     //----------------------------------------------------------------------------------
+    public function usuarios()
+    {
+        return $this->hasMany(Usuario::class, 'regional_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function arquitectos()
+    {
+        return $this->hasMany(Arquitecto::class, 'regional_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
 }

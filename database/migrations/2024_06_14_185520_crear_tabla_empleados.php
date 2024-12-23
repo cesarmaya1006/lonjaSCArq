@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('nombres');
             $table->string('apellidos');
             $table->string('telefono');
-            $table->string('direccion');
-            $table->string('foto', 255)->default('usuario-inicial.jpg');
             $table->boolean('estado')->default(1);
             $table->timestamps();
             $table->charset = 'utf8';

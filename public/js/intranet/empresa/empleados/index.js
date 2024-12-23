@@ -150,7 +150,6 @@ function llenar_tabla_empleados(data,filtro) {
         });
     } else if(filtro =='area'){
         $.each(data, function (index, cargo) {
-            console.log('area');
             $.each(cargo.empleados, function (index, empleado) {
                 respuesta_tabla_html += "<tr>";
                 respuesta_tabla_html += '<td class="text-center">' + empleado.id + "</td>";

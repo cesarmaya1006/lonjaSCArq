@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Empresa\Arquitecto;
+use App\Models\Empresa\ConstrucEmpleado;
 use App\Models\Empresa\Empleado;
+use App\Models\Empresa\Inmueble;
+use App\Models\Empresa\Usuario;
 use App\Models\Sistema\Mensaje;
 use App\Models\Sistema\Notificacion;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -76,6 +80,27 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Empleado::class, 'id');
     }
+    //----------------------------------------------------------------------------------
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function arquitecto()
+    {
+        return $this->belongsTo(Arquitecto::class, 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function empleadoconstruc()
+    {
+        return $this->belongsTo(ConstrucEmpleado::class, 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function inmuebles()
+    {
+        return $this->hasMany(Inmueble::class, 'usuario_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------
     //==================================================================================
